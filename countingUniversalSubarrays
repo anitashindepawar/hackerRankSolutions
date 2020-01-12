@@ -1,0 +1,67 @@
+/*
+ * Complete the 'countingUniversalSubarrays' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY arr as parameter.
+ */
+
+function countingUniversalSubarrays(arr) {
+  // Write your code here
+  let arrLength = arr.length;
+  let subArrayLength = 2;
+  let universalSubArrays = [];
+  if (subArrayLength <= arrLength) {
+    for (let i = 0; i < arrLength; i++) {
+      for (let j = i + 1; j < arrLength; j++) {
+        let subArray = arr.slice(i, j + 1);
+        if (isTotalNumberSame(subArray)) {
+          if (isGroupedConsecutively(subArray)) {
+            universalSubArrays.push(subArray);
+          }
+        }
+      }
+    }
+    subArrayLength++;
+  }
+  console.log('universalSubArrays', universalSubArrays);
+  return universalSubArrays.length;
+}
+
+function isTotalNumberSame(array) {
+  let countFours = array.filter(x => x === 4).length;
+  let countTwos = array.filter(x => x === 2).length; return countFours === countTwos;
+}
+
+function isGroupedConsecutively(array) {
+  let isConsecutive = false;
+  let positionOfFours = array && array.map((e, i) => e === 4 ? i : '').filter(String);
+
+  let positionOfTwos = array && array.map((e, i) => e === 2 ? i : '').filter(String);
+
+  if (positionOfFours.length === 1 && positionOfTwos.length === 1) {
+    isConsecutive = true;
+  } else {
+    if (isPostionConsecutive(positionOfFours)) {
+      if (isPostionConsecutive(positionOfTwos)) {
+        isConsecutive = true;
+      }
+    }
+  }
+
+  return isConsecutive;
+}
+
+function isPostionConsecutive(posArray) {
+  const a = [];
+  posArray && posArray.map((e, i) => {
+    if (e + 1 === posArray[i + 1]) {
+      a.push(e);
+      if (i + 2 === posArray.length) {
+        a.push(posArray[i + 1]);
+      }
+    }
+  });
+  return a.length === posArray.length;
+}
+
+countingUniversalSubarrays([4,4,2,2,4]);
